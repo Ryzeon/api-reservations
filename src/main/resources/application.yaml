@@ -50,7 +50,7 @@ http-connector:
           url: "/api/flights/catalog/city/{code}"
           readTimeout: 1000
           writeTimeout: 1000
-          connectTimeout: 1000
+          connectionTimeout: 2000
 
 resilience4j:
   circuitbreaker:

@@ -5,7 +5,6 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
-import io.netty.resolver.DefaultAddressResolverGroup;
 import lombok.AllArgsConstructor;
 import me.ryzeon.reservations.conector.configuration.EndpointConfiguration;
 import me.ryzeon.reservations.conector.configuration.HostConfiguration;
@@ -53,7 +52,7 @@ public class CatalogConnector {
 
 
         WebClient client = WebClient.builder()
-                .baseUrl("https://" + hostConfiguration.getHost() + ":" + hostConfiguration.getPort() + endpointConfiguration.getUrl())
+                .baseUrl("http://" + hostConfiguration.getHost() + ":" + hostConfiguration.getPort() + endpointConfiguration.getUrl())
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
