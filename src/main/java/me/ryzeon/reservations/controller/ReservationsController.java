@@ -1,9 +1,12 @@
 package me.ryzeon.reservations.controller;
 
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import me.ryzeon.reservations.dto.ReservationDto;
+import me.ryzeon.reservations.enums.ApiException;
+import me.ryzeon.reservations.exception.ReservationException;
 import me.ryzeon.reservations.services.ReservationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +34,8 @@ public class ReservationsController {
     }
 
     @PostMapping
-    public ResponseEntity<ReservationDto> createReservation(@RequestBody ReservationDto reservationDto) {
+    @RateLimiter(name= "post-reservation", fallbackMethod = "fallbackPost")
+    public ResponseEntity<ReservationDto> createReservation(@Valid @RequestBody ReservationDto reservationDto) {
         ReservationDto reservation = reservationService.createReservation(reservationDto);
         return new ResponseEntity<>(reservation, HttpStatus.CREATED);
     }
@@ -46,5 +50,9 @@ public class ReservationsController {
     public ResponseEntity<Void> deleteReservation(@Min(1) @PathVariable Long id) {
         reservationService.deleteReservation(id);
         return ResponseEntity.noContent().build();
+    }
+
+    private ResponseEntity<ReservationDto> fallbackPost(ReservationDto reservationDto, Throwable throwable) {
+       throw new ReservationException(ApiException.EXCEED_NUMBER_OPERATIONS);
     }
 }
