@@ -14,18 +14,8 @@ public class Itinerary {
     private Long id;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    private final List<Segment> segments;
+    private List<Segment> segments;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private final Price price;
-
-    public Itinerary() {
-        this.segments = null;
-        this.price = null;
-    }
-
-    public Itinerary(List<Segment> segments, Price price) {
-        this.segments = segments;
-        this.price = price;
-    }
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Price price;
 }

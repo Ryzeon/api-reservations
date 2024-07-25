@@ -16,16 +16,6 @@ public class Reservation {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Passenger> passengers;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Itinerary itinerary;
-
-    public Reservation() {
-        this.passengers = null;
-        this.itinerary = null;
-    }
-
-    public Reservation(List<Passenger> passengers, Itinerary itinerary) {
-        this.passengers = passengers;
-        this.itinerary = itinerary;
-    }
 }

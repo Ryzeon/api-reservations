@@ -44,6 +44,8 @@ public class ReservationServiceImpl implements ReservationService {
         }
         checkCity(reservationDto);
         Reservation reservation = conversionService.convert(reservationDto, Reservation.class);
+
+        System.out.println("Reservation: " + reservation.toString());
         Reservation savedReservation = repository.save(Objects.requireNonNull(reservation));
         return conversionService.convert(savedReservation, ReservationDto.class);
     }

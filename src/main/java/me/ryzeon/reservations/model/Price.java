@@ -19,13 +19,4 @@ public class Price {
     private BigDecimal totalPrice;
     private BigDecimal totalTaxes;
     private BigDecimal basePrice;
-
-    public Price() {
-    }
-
-    public Price(BigDecimal totalPrice, BigDecimal totalTaxes, BigDecimal basePrice) {
-        this.totalPrice = totalPrice;
-        this.totalTaxes = totalTaxes;
-        this.basePrice = basePrice;
-    }
 }

@@ -76,7 +76,7 @@ public interface ReservationResource {
                         }
                       ],
                       "itinerary": {
-                        "segment": [
+                        "segments": [
                           {
                             "origin": "BUE",
                             "destination": "MIA",
@@ -129,7 +129,7 @@ public interface ReservationResource {
                         }
                       ],
                       "itinerary": {
-                        "segment": [
+                        "segments": [
                           {
                             "origin": "EZE",
                             "destination": "MIA",

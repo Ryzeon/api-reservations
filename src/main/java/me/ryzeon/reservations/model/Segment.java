@@ -19,15 +19,4 @@ public class Segment {
     private String departure;
     private String arrival;
     private String carrier;
-
-    public Segment() {
-    }
-
-    public Segment(String origin, String destination, String departure, String arrival, String carrier) {
-        this.origin = origin;
-        this.destination = destination;
-        this.departure = departure;
-        this.arrival = arrival;
-        this.carrier = carrier;
-    }
 }
