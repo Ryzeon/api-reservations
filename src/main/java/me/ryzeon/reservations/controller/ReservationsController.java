@@ -10,6 +10,8 @@ import me.ryzeon.reservations.dto.ReservationDto;
 import me.ryzeon.reservations.enums.ApiException;
 import me.ryzeon.reservations.exception.ReservationException;
 import me.ryzeon.reservations.services.ReservationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,8 @@ import java.util.List;
 public class ReservationsController implements ReservationResource {
 
     private final ReservationService reservationService;
+
+    private final Logger LOGGER = LoggerFactory.getLogger(ReservationsController.class);
 
     @GetMapping
     public ResponseEntity<List<ReservationDto>> getReservations() {
@@ -43,7 +47,8 @@ public class ReservationsController implements ReservationResource {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReservationDto> updateReservation(@Min(1) @PathVariable Long id, @Valid @RequestBody ReservationDto reservationDto) {
+    public ResponseEntity<ReservationDto> updateReservation(@Min(1) @PathVariable Long id,
+            @Valid @RequestBody ReservationDto reservationDto) {
         ReservationDto reservation = reservationService.updateReservation(id, reservationDto);
         return ResponseEntity.ok(reservation);
     }
@@ -55,6 +60,7 @@ public class ReservationsController implements ReservationResource {
     }
 
     private ResponseEntity<ReservationDto> fallbackPost(ReservationDto reservationDto, RequestNotPermitted ex) {
+        LOGGER.error("Rate limit reached for post-reservation");
         throw new ReservationException(ApiException.EXCEED_NUMBER_OPERATIONS);
     }
 }

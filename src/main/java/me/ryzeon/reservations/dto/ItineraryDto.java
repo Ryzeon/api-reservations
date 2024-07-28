@@ -4,9 +4,5 @@ import jakarta.validation.Valid;
 
 import java.util.List;
 
-public record ItineraryDto(
-        @Valid
-        List<SegmentDto> segments,
-        PriceDto price
-) {
+public record ItineraryDto(@Valid List<SegmentDto> segments, PriceDto price) {
 }

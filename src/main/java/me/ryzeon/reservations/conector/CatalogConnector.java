@@ -23,7 +23,6 @@ import reactor.netty.http.client.HttpClient;
 
 import java.util.concurrent.TimeUnit;
 
-
 @Component
 @AllArgsConstructor
 public class CatalogConnector {
@@ -41,38 +40,37 @@ public class CatalogConnector {
         HostConfiguration hostConfiguration = configuration.getHosts().get(HOST);
         EndpointConfiguration endpointConfiguration = hostConfiguration.getEndpoints().get(ENDPOINT);
 
-        HttpClient httpClient = HttpClient.create()
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, Math.toIntExact(endpointConfiguration.getConnectionTimeout()))
-                .observe((conn, state) -> {
+        HttpClient httpClient = HttpClient.create().option(ChannelOption.CONNECT_TIMEOUT_MILLIS,
+                Math.toIntExact(endpointConfiguration.getConnectionTimeout())).observe((conn, state) -> {
                     if (state == ConnectionObserver.State.CONFIGURED) {
-                        conn.addHandlerLast(new ReadTimeoutHandler(endpointConfiguration.getReadTimeout(), TimeUnit.MILLISECONDS));
-                        conn.addHandlerLast(new WriteTimeoutHandler(endpointConfiguration.getWriteTimeout(), TimeUnit.MILLISECONDS));
+                        conn.addHandlerLast(
+                                new ReadTimeoutHandler(endpointConfiguration.getReadTimeout(), TimeUnit.MILLISECONDS));
+                        conn.addHandlerLast(new WriteTimeoutHandler(endpointConfiguration.getWriteTimeout(),
+                                TimeUnit.MILLISECONDS));
                     }
                 });
 
-
         WebClient client = WebClient.builder()
-                .baseUrl("http://" + hostConfiguration.getHost() + ":" + hostConfiguration.getPort() + endpointConfiguration.getUrl())
+                .baseUrl("http://" + hostConfiguration.getHost() + ":" + hostConfiguration.getPort()
+                        + endpointConfiguration.getUrl())
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-                .clientConnector(new ReactorClientHttpConnector(httpClient))
-                .build();
+                .clientConnector(new ReactorClientHttpConnector(httpClient)).build();
 
-
-        return client.get()
-                .uri(urlEncoder -> urlEncoder.build(code))
-                .retrieve()
-                .bodyToMono(CityDto.class)
-                .share()
+        return client.get().uri(urlEncoder -> urlEncoder.build(code)).retrieve().bodyToMono(CityDto.class).share()
                 .block();
     }
 
     /**
-     * Fallback method for when the circuit breaker is open and the primary call to get city information is not permitted.
-     * This method logs the event and returns a default {@link CityDto} instance with the provided code and null values for other fields.
+     * Fallback method for when the circuit breaker is open and the primary call to get city information is not
+     * permitted. This method logs the event and returns a default {@link CityDto} instance with the provided code and
+     * null values for other fields.
      *
-     * @param code The city code for which information was requested.
-     * @param ex The {@link CallNotPermittedException} exception indicating the circuit breaker is open.
+     * @param code
+     *            The city code for which information was requested.
+     * @param ex
+     *            The {@link CallNotPermittedException} exception indicating the circuit breaker is open.
+     *
      * @return A {@link CityDto} instance with the provided code and null values for other fields.
      */
     public CityDto fallbackGetCity(String code, CallNotPermittedException ex) {
@@ -81,12 +79,16 @@ public class CatalogConnector {
     }
 
     /**
-     * Fallback method for handling exceptions other than {@link CallNotPermittedException} when calling the api-catalog.
-     * This method logs the error and throws a {@link ReservationException} indicating a validation error.
+     * Fallback method for handling exceptions other than {@link CallNotPermittedException} when calling the
+     * api-catalog. This method logs the error and throws a {@link ReservationException} indicating a validation error.
      *
-     * @param code The city code for which information was requested.
-     * @param ex The exception that occurred during the api call.
-     * @throws ReservationException indicating a validation error.
+     * @param code
+     *            The city code for which information was requested.
+     * @param ex
+     *            The exception that occurred during the api call.
+     *
+     * @throws ReservationException
+     *             indicating a validation error.
      */
     public CityDto fallbackGetCity(String code, Exception ex) {
         LOGGER.error("Error while calling api-catalog", ex);

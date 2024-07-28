@@ -25,7 +25,8 @@ public class Passenger {
     public Passenger() {
     }
 
-    public Passenger(String firstName, String lastName, String documentNumber, String documentType, LocalDate birthDate) {
+    public Passenger(String firstName, String lastName, String documentNumber, String documentType,
+            LocalDate birthDate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.documentNumber = documentNumber;

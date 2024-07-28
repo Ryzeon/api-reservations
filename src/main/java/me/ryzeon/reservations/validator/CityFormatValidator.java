@@ -7,8 +7,6 @@ public class CityFormatValidator implements ConstraintValidator<CityFormatConstr
 
     @Override
     public boolean isValid(String field, ConstraintValidatorContext constraintValidatorContext) {
-        return field != null
-                && field.matches("[A-Z]+")
-                && field.length() == 3;
+        return field != null && field.matches("[A-Z]+") && field.length() == 3;
     }
 }

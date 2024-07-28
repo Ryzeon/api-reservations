@@ -7,7 +7,7 @@ import org.springframework.core.convert.converter.Converter;
 
 import java.util.List;
 
-@Mapper (componentModel = "spring")
+@Mapper(componentModel = "spring")
 public interface ReservationsMapper extends Converter<List<Reservation>, List<ReservationDto>> {
 
     @Override

@@ -5,7 +5,7 @@ import me.ryzeon.reservations.model.Reservation;
 import org.mapstruct.Mapper;
 import org.springframework.core.convert.converter.Converter;
 
-@Mapper (componentModel = "spring")
+@Mapper(componentModel = "spring")
 public interface ReservationMapper extends Converter<Reservation, ReservationDto> {
 
     @Override

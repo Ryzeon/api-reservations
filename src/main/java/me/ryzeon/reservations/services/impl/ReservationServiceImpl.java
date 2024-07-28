@@ -33,7 +33,8 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public ReservationDto getReservationById(Long id) {
-        Reservation reservation = repository.findById(id).orElseThrow(() -> new ReservationException(ApiException.RESERVATION_NOT_FOUND));
+        Reservation reservation = repository.findById(id)
+                .orElseThrow(() -> new ReservationException(ApiException.RESERVATION_NOT_FOUND));
         return conversionService.convert(reservation, ReservationDto.class);
     }
 
